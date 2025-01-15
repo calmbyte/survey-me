@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   controlBtnContainer: {
     zIndex: 2,
     position: 'absolute',
-    right: 16,
+    left: 16,
   },
   controlBtn: {
     width: 60,
@@ -161,13 +161,13 @@ export const Screen = ({isVisible, onClose}: Props) => {
           />
         )}
         <Animated.View
-          style={[styles.controlBtnContainer, animatedStyle, {top: 24 + top}]}>
+          style={[styles.controlBtnContainer, animatedStyle, {top: 16 + top}]}>
           <Pressable onPress={handleClose} style={styles.controlBtn}>
             <X size={38} color="#333" />
           </Pressable>
         </Animated.View>
         <Animated.View
-          style={[styles.controlBtnContainer, animatedStyle, {top: 108 + top}]}>
+          style={[styles.controlBtnContainer, animatedStyle, {top: 100 + top}]}>
           <Pressable onPress={toggleFlashlight} style={styles.controlBtn}>
             {isFlashlightEnabled ? (
               <ZapOff size={38} color="#333" />
