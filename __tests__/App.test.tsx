@@ -3,6 +3,8 @@
  */
 
 import 'react-native';
+import "../global.css";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import React from 'react';
 import App from '../src/App';
 

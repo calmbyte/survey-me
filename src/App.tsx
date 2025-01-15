@@ -5,6 +5,8 @@
  * @format
  */
 
+import '../global.css';
+
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -12,6 +14,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Screen as CameraScreen} from './features/camera/screen';
 import {Screen as WelcomeScreen} from './features/welcome/screen';
 import {Screen as SurveyScreen} from './features/survey/screen';
+import {GluestackUIProvider} from '@/components/ui/gluestack-ui-provider';
 
 type Screen = 'camera' | 'survey' | 'welcome';
 
@@ -31,20 +34,22 @@ function App(): React.JSX.Element {
   const [activeScreen, setActiveScreen] = useState<Screen>('welcome');
 
   return (
-    <SafeAreaProvider>
-      <View style={styles.container}>
-        <CameraScreen
-          isVisible={activeScreen === 'camera'}
-          onClose={openWelcome}
-        />
-        <WelcomeScreen
-          onOpenSurvey={openSurvey}
-          isVisible={activeScreen === 'welcome'}
-          onOpenCamera={openCamera}
-        />
-        <SurveyScreen isVisible={activeScreen === 'survey'} />
-      </View>
-    </SafeAreaProvider>
+    <GluestackUIProvider>
+      <SafeAreaProvider>
+        <View style={styles.container}>
+          <CameraScreen
+            isVisible={activeScreen === 'camera'}
+            onClose={openWelcome}
+          />
+          <WelcomeScreen
+            onOpenSurvey={openSurvey}
+            isVisible={activeScreen === 'welcome'}
+            onOpenCamera={openCamera}
+          />
+          <SurveyScreen isVisible={activeScreen === 'survey'} />
+        </View>
+      </SafeAreaProvider>
+    </GluestackUIProvider>
   );
 }
 
