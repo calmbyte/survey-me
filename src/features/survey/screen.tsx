@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
+import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import Animated, {
   useSharedValue,
   withTiming,
   Easing,
 } from 'react-native-reanimated';
-import {Survey} from './types/survey';
+import {Survey as SurveyType} from './types/survey';
+import {Survey} from './widgets/survey';
 
 type Props = {
   isVisible: boolean;
@@ -20,28 +21,46 @@ const styles = StyleSheet.create({
   },
 });
 
-const surveyMock: Survey = {
+const surveyMock: SurveyType = {
   id: '1',
-  title: 'Survey',
+  title: 'Survey #1',
   description: 'This is a survey',
   type: 'form',
   questions: [
     {
-      id: '1',
-      text: 'What is your name?',
-      type: 'radio',
-      options: ['John', 'Doe'],
+      id: 'color',
+      text: 'Select colors with blue shade',
+      type: 'checkbox',
+      options: ['Green', 'Cyan', 'Lightblue'],
       props: {
         required: true,
       },
     },
     {
-      id: '2',
-      text: 'What is your favorite color',
+      id: 'name',
+      text: 'What is your name?',
       type: 'text',
       props: {
         required: true,
-        maxLength: 3,
+        maxLength: 50,
+      },
+    },
+    {
+      id: 'hobbies',
+      text: 'Please let us know about your hobbies',
+      type: 'textarea',
+      props: {
+        required: true,
+        maxLength: 50,
+      },
+    },
+    {
+      id: 'gender',
+      text: 'Gender',
+      type: 'radio',
+      options: ['Male', 'Female', 'Other'],
+      props: {
+        required: true,
       },
     },
   ],
@@ -50,7 +69,7 @@ const surveyMock: Survey = {
 export const Screen = ({isVisible}: Props) => {
   const opacity = useSharedValue(0);
 
-  const [survey, setSurvey] = useState<Survey>();
+  const [survey, setSurvey] = useState<SurveyType>();
 
   useEffect(() => {
     if (isVisible) {
@@ -81,7 +100,7 @@ export const Screen = ({isVisible}: Props) => {
       ]}>
       <View style={styles.container}>
         {survey ? (
-          <Text style={styles.title}>Welcome to Survey App</Text>
+          <Survey survey={survey} />
         ) : (
           <View
             style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
