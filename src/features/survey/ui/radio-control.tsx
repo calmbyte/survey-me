@@ -15,14 +15,20 @@ type Props = {
 };
 
 export const RadioControl = ({name, options}: Props) => {
-  const {control} = useFormContext();
+  const {
+    control,
+    formState: {errors},
+  } = useFormContext();
 
   return (
     <Controller
       control={control}
       name={name}
       render={({field: {onChange, value}}) => (
-        <RadioGroup value={value} onChange={onChange}>
+        <RadioGroup
+          value={value}
+          onChange={onChange}
+          isInvalid={!!errors[name]}>
           {options.map(o => (
             <Radio key={o} value={o} size="md">
               <RadioIndicator>

@@ -1,13 +1,10 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
+    "moduleSuffixes": [".android", ".ios", ""],
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "tailwind.config": [
-        "./tailwind.config.js"
-      ]
+      "@/*": ["./*"],
+      "tailwind.config": ["./tailwind.config.js"]
     }
   }
 }

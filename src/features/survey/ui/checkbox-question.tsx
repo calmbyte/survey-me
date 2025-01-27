@@ -17,7 +17,11 @@ type Props = {
 };
 
 export const CheckboxControl = ({options, name}: Props) => {
-  const {control, watch} = useFormContext();
+  const {
+    control,
+    watch,
+    formState: {errors},
+  } = useFormContext();
 
   const selectedOptions = watch(name);
 
@@ -45,6 +49,7 @@ export const CheckboxControl = ({options, name}: Props) => {
           value={o}
           size="md"
           key={o}
+          isInvalid={!!errors[name]}
           onChange={checked => {
             handleChange(checked, o);
           }}>

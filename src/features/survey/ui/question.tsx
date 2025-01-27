@@ -13,16 +13,10 @@ type Props = {
 
 export const Question = ({question}: Props) => {
   return (
-    <View
-      style={{
-        borderRadius: 8,
-        borderWidth: 2,
-        borderColor: 'black',
-        padding: 8,
-      }}>
-      <Text>Type: {question.type}</Text>
-      <Text>===============</Text>
-      <Text>{question.text}</Text>
+    <View className="rounded-[8] border-2 border-black p-[8]">
+      <Text>
+        {question.text} {question.props.required && <Text>*</Text>}
+      </Text>
       {question.type === 'checkbox' && (
         <CheckboxControl name={question.id} options={question.options} />
       )}
