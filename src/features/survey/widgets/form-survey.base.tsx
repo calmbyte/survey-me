@@ -8,6 +8,7 @@ import {useFormContext} from 'react-hook-form';
 
 export type Props = {
   questions: QuestionType[];
+  onSubmit: () => void;
 };
 
 export const renderItem = ({item}: {item: QuestionType}) => {
@@ -18,17 +19,18 @@ export const ItemSeparator = () => <View className="h-[24]" />;
 
 export const keyExtractor = (item: QuestionType) => item.id;
 
-export const ListFooter = () => {
+export const ListFooter = ({onSubmit}: {onSubmit: () => void}) => {
   const {handleSubmit} = useFormContext();
 
-  const onSubmit = (data: Record<string, string | string[]>) => {
+  const handleSubmitCb = (data: Record<string, string | string[]>) => {
     console.log(data);
+    onSubmit();
   };
 
   return (
     <View className="mt-6">
       <Button
-        onPress={handleSubmit(onSubmit)}
+        onPress={handleSubmit(handleSubmitCb)}
         size="md"
         variant="solid"
         action="primary">

@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Text, Pressable, StyleSheet, TextInput, View, Keyboard} from 'react-native';
+import {
+  Text,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
+  Keyboard,
+} from 'react-native';
 import Animated, {
   Easing,
   useSharedValue,
@@ -84,6 +91,7 @@ export const Screen = ({isVisible, onOpenCamera, onOpenSurvey}: Props) => {
   useEffect(() => {
     if (code.length > 7) {
       onOpenSurvey();
+      setCode('');
       Keyboard.dismiss();
     }
   }, [code, onOpenSurvey]);

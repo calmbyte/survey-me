@@ -17,10 +17,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     marginTop: 12,
+    marginBottom: 12,
   },
 });
 
-type Props = {survey: SurveyType};
+type Props = {survey: SurveyType; onSubmit: () => void};
 
 const createValidationSchema = (questions: Question[]) => {
   const schema: Record<string, Schema> = {};
@@ -85,14 +86,16 @@ const useSurveyForm = (survey: SurveyType) => {
   return methods;
 };
 
-export const Survey = ({survey}: Props) => {
+export const Survey = ({survey, onSubmit}: Props) => {
   const methods = useSurveyForm(survey);
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>{survey.title}</Text>
       <FormProvider {...methods}>
-        {survey.type === 'form' && <FormSurvey questions={survey.questions} />}
+        {survey.type === 'form' && (
+          <FormSurvey onSubmit={onSubmit} questions={survey.questions} />
+        )}
       </FormProvider>
     </SafeAreaView>
   );

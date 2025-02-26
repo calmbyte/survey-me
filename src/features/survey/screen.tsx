@@ -1,92 +1,37 @@
-import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, ActivityIndicator} from 'react-native';
+import React, {memo, useEffect} from 'react';
+import {View, StyleSheet, ActivityIndicator, Text} from 'react-native';
 import Animated, {
   useSharedValue,
   withTiming,
   Easing,
 } from 'react-native-reanimated';
-import {Survey as SurveyType} from './types/survey';
 import {Survey} from './widgets/survey';
+import {useSurveyQuery} from './hooks/useSurveyQuery';
 
 type Props = {
   isVisible: boolean;
+  onOpenSubmission: () => void;
 };
 
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 32,
-  },
-  container: {
-    flex: 1,
-  },
-});
-
-const surveyMock: SurveyType = {
-  id: '1',
-  title: 'Survey #1',
-  description: 'This is a survey',
-  type: 'form',
-  questions: [
-    {
-      id: 'color',
-      text: 'Select colors with blue shade',
-      type: 'checkbox',
-      options: ['Green', 'Cyan', 'Lightblue'],
-      props: {
-        required: true,
-      },
-    },
-    {
-      id: 'name',
-      text: 'What is your name?',
-      type: 'text',
-      props: {
-        required: true,
-        maxLength: 50,
-      },
-    },
-    {
-      id: 'hobbies',
-      text: 'Please let us know about your hobbies',
-      type: 'textarea',
-      props: {
-        required: true,
-        maxLength: 50,
-      },
-    },
-    {
-      id: 'gender',
-      text: 'Gender',
-      type: 'radio',
-      options: ['Male', 'Female', 'Other'],
-      props: {
-        required: true,
-      },
-    },
-  ],
-};
-
-export const Screen = ({isVisible}: Props) => {
+export const Screen = memo(({isVisible, onOpenSubmission}: Props) => {
   const opacity = useSharedValue(0);
 
-  const [survey, setSurvey] = useState<SurveyType>();
+  const {data, loading, error, fetchSurvey} = useSurveyQuery();
 
   useEffect(() => {
     if (isVisible) {
-      setTimeout(() => {
-        setSurvey(surveyMock);
-      }, 500);
       opacity.value = withTiming(1, {
         duration: 1000,
         easing: Easing.inOut(Easing.cubic),
       });
+      fetchSurvey();
     } else {
       opacity.value = withTiming(0, {
         duration: 500,
         easing: Easing.in(Easing.cubic),
       });
     }
-  }, [isVisible, opacity]);
+  }, [fetchSurvey, isVisible, opacity]);
 
   return (
     <Animated.View
@@ -98,16 +43,19 @@ export const Screen = ({isVisible}: Props) => {
           pointerEvents: isVisible ? 'auto' : 'none',
         },
       ]}>
-      <View style={styles.container}>
-        {survey ? (
-          <Survey survey={survey} />
-        ) : (
-          <View
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View className="flex-1">
+        {loading && !data && (
+          <View className="items-center justify-center flex-1">
             <ActivityIndicator size="large" color="#31363F" />
           </View>
         )}
+        {error && (
+          <View className="items-center justify-center flex-1">
+            <Text>Error {error}</Text>
+          </View>
+        )}
+        {data && <Survey survey={data} onSubmit={onOpenSubmission} />}
       </View>
     </Animated.View>
   );
-};
+});

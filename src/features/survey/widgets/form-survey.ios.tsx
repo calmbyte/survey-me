@@ -9,7 +9,7 @@ import {
   renderItem,
 } from './form-survey.base';
 
-export const FormSurvey = ({questions}: Props) => {
+export const FormSurvey = ({questions, onSubmit}: Props) => {
   return (
     <KeyboardAvoidingView className="flex-1" behavior="padding">
       <FlatList
@@ -17,7 +17,7 @@ export const FormSurvey = ({questions}: Props) => {
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         ItemSeparatorComponent={ItemSeparator}
-        ListFooterComponent={ListFooter}
+        ListFooterComponent={<ListFooter onSubmit={onSubmit} />}
       />
     </KeyboardAvoidingView>
   );
