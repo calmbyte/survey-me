@@ -1,6 +1,6 @@
 import {Button, ButtonText} from '@/components/ui/button';
 import React, {useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import Animated, {
   useSharedValue,
   Easing,
@@ -18,12 +18,12 @@ export const SubmissionScreen = ({isVisible, onOpenWelcome}: Props) => {
   useEffect(() => {
     if (isVisible) {
       opacity.value = withTiming(1, {
-        duration: 1000,
+        duration: 600,
         easing: Easing.inOut(Easing.cubic),
       });
     } else {
       opacity.value = withTiming(0, {
-        duration: 1000,
+        duration: 600,
         easing: Easing.in(Easing.cubic),
       });
     }
@@ -31,14 +31,12 @@ export const SubmissionScreen = ({isVisible, onOpenWelcome}: Props) => {
 
   return (
     <Animated.View
-      style={[
-        StyleSheet.absoluteFill,
-        // eslint-disable-next-line react-native/no-inline-styles
-        {
-          opacity,
-          pointerEvents: isVisible ? 'auto' : 'none',
-        },
-      ]}>
+      className={`absolute inset-0 ${
+        isVisible ? 'pointer-events-auto' : 'pointer-events-none'
+      }`}
+      style={{
+        opacity,
+      }}>
       <View className="flex-1 items-center justify-center">
         <Text>Thanks for your submission!</Text>
         <Text>We will get back to you soon.</Text>

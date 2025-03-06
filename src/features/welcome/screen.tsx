@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  Pressable,
-  StyleSheet,
-  TextInput,
-  View,
-  Keyboard,
-} from 'react-native';
+import {Text, Pressable, TextInput, View, Keyboard} from 'react-native';
 import Animated, {
   Easing,
   useSharedValue,
@@ -16,58 +9,17 @@ import {useCheckCameraPermission} from '../../services/permissions/hooks/useChec
 import {Camera} from 'lucide-react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 32,
-    marginBottom: 64,
-  },
-  content: {
-    alignItems: 'center',
-    alignSelf: 'center',
-    gap: 16,
-  },
-  text: {
-    fontSize: 24,
-  },
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#31363F',
-    paddingVertical: 12,
-    paddingHorizontal: 18,
-    borderRadius: 12,
-    gap: 12,
-  },
-  buttonText: {
-    color: '#FFFAEC',
-    fontSize: 20,
-  },
-  input: {
-    borderRadius: 12,
-    backgroundColor: '#FFFAEC',
-    color: '#31363F',
-    borderWidth: 1,
-    borderColor: '#31363F',
-    width: 180,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    fontSize: 24,
-    textTransform: 'uppercase',
-  },
-});
-
 type Props = {
   isVisible: boolean;
   onOpenCamera: () => void;
   onOpenSurvey: () => void;
 };
 
-export const Screen = ({isVisible, onOpenCamera, onOpenSurvey}: Props) => {
+export const WelcomeScreen = ({
+  isVisible,
+  onOpenCamera,
+  onOpenSurvey,
+}: Props) => {
   const opacity = useSharedValue(0);
   const {top} = useSafeAreaInsets();
   const {isCameraPermissionGranted} = useCheckCameraPermission();
@@ -98,30 +50,31 @@ export const Screen = ({isVisible, onOpenCamera, onOpenSurvey}: Props) => {
 
   return (
     <Animated.View
-      style={[
-        styles.container,
-        // eslint-disable-next-line react-native/no-inline-styles
-        {opacity, pointerEvents: isVisible ? 'auto' : 'none'},
-      ]}>
-      <Text style={[styles.title, {marginTop: top + 100}]}>
+      className={`flex-1 items-center ${
+        isVisible ? 'pointer-events-auto' : 'pointer-events-none'
+      }`}
+      style={{
+        opacity,
+      }}>
+      <Text className="text-[32px] mb-16" style={{marginTop: top + 100}}>
         Welcome to SurveyMe
       </Text>
-      <View style={styles.content}>
-        <Text style={styles.text}>Insert survey code</Text>
+      <View className="items-center self-center gap-4">
+        <Text className="text-2xl">Insert survey code</Text>
         <TextInput
           placeholder="FE3BC12P"
           placeholderTextColor={'#ccc'}
-          style={styles.input}
+          className="rounded-xl bg-[#FFFAEC] text-[#31363F] border border-[#31363F] w-[180px] py-3 px-4 text-2xl uppercase"
           onChangeText={setCode}
           value={code}
         />
-        <Text style={styles.text}>Or</Text>
+        <Text className="text-2xl">Or</Text>
         <Pressable
           disabled={!isCameraPermissionGranted}
-          style={styles.button}
+          className="flex-row items-center justify-center bg-[#31363F] py-3 px-[18px] rounded-xl gap-3"
           onPress={onOpenCamera}>
           <Camera color="#FFFAEC" />
-          <Text style={styles.buttonText}>Scan QR</Text>
+          <Text className="text-[#FFFAEC] text-xl">Scan QR</Text>
         </Pressable>
       </View>
     </Animated.View>

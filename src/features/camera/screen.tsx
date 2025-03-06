@@ -3,7 +3,7 @@ import {
   ReactNativeScannerView,
 } from '@pushpendersingh/react-native-scanner';
 import React, {useEffect, useRef, useState} from 'react';
-import {Dimensions, Pressable, StyleSheet, View} from 'react-native';
+import {Dimensions, Pressable, View} from 'react-native';
 import Animated, {
   Extrapolation,
   interpolate,
@@ -18,48 +18,14 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const overlaySize = 10;
 const height = Dimensions.get('window').height;
-
 const scaleValue = (height / overlaySize) * 2.25;
-
-const styles = StyleSheet.create({
-  overlay: {
-    width: overlaySize,
-    height: overlaySize,
-    borderRadius: 50,
-    backgroundColor: 'black',
-    position: 'absolute',
-    right: -overlaySize,
-    bottom: -overlaySize,
-    pointerEvents: 'none',
-    transformOrigin: 'center center',
-  },
-  controlBtnContainer: {
-    zIndex: 2,
-    position: 'absolute',
-    left: 16,
-  },
-  controlBtn: {
-    width: 60,
-    height: 60,
-    borderRadius: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    borderWidth: 2,
-    borderColor: '#333',
-  },
-  scanner: {
-    zIndex: 2,
-    flex: 1,
-  },
-});
 
 type Props = {
   isVisible: boolean;
   onClose: () => void;
 };
 
-export const Screen = ({isVisible, onClose}: Props) => {
+export const CameraScreen = ({isVisible, onClose}: Props) => {
   const {top} = useSafeAreaInsets();
   const scannerRef = useRef(null);
   const scale = useSharedValue(1);
@@ -133,25 +99,19 @@ export const Screen = ({isVisible, onClose}: Props) => {
   return (
     <>
       <View
-        style={[
-          StyleSheet.absoluteFill,
-          // eslint-disable-next-line react-native/no-inline-styles
-          {
-            pointerEvents: isVisible ? 'auto' : 'none',
-          },
-        ]}>
+        className={`absolute inset-0 ${
+          isVisible ? 'pointer-events-auto' : 'pointer-events-none'
+        }`}>
         <Animated.View
-          style={[
-            {
-              transform: [{scale}],
-            },
-            styles.overlay,
-          ]}
+          style={{
+            transform: [{scale}],
+          }}
+          className="w-[10px] h-[10px] rounded-full bg-black absolute -right-[10px] -bottom-[10px] pointer-events-none origin-center"
         />
         {animationState === 'finished' && (
           <ReactNativeScannerView
             ref={scannerRef}
-            style={styles.scanner}
+            className="z-20 flex-1"
             onQrScanned={(...args) => {
               console.log(args);
             }}
@@ -161,14 +121,20 @@ export const Screen = ({isVisible, onClose}: Props) => {
           />
         )}
         <Animated.View
-          style={[styles.controlBtnContainer, animatedStyle, {top: 16 + top}]}>
-          <Pressable onPress={handleClose} style={styles.controlBtn}>
+          style={[animatedStyle, {top: 16 + top}]}
+          className="z-20 absolute left-4">
+          <Pressable
+            onPress={handleClose}
+            className="w-[60px] h-[60px] rounded-[32px] justify-center items-center bg-white border-2 border-[#333]">
             <X size={38} color="#333" />
           </Pressable>
         </Animated.View>
         <Animated.View
-          style={[styles.controlBtnContainer, animatedStyle, {top: 100 + top}]}>
-          <Pressable onPress={toggleFlashlight} style={styles.controlBtn}>
+          style={[animatedStyle, {top: 100 + top}]}
+          className="z-20 absolute left-4">
+          <Pressable
+            onPress={toggleFlashlight}
+            className="w-[60px] h-[60px] rounded-[32px] justify-center items-center bg-white border-2 border-[#333]">
             {isFlashlightEnabled ? (
               <ZapOff size={38} color="#333" />
             ) : (

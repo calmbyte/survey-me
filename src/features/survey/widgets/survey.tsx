@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {Text} from 'react-native';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {FormProvider, useForm} from 'react-hook-form';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -8,18 +8,6 @@ import {array, ArraySchema, object, Schema, string, StringSchema} from 'yup';
 import {Survey as SurveyType} from '../types/survey';
 import {Question} from '../types/question';
 import {FormSurvey} from './form-survey';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 24,
-  },
-  title: {
-    fontSize: 32,
-    marginTop: 12,
-    marginBottom: 12,
-  },
-});
 
 type Props = {survey: SurveyType; onSubmit: () => void};
 
@@ -90,9 +78,10 @@ export const Survey = ({survey, onSubmit}: Props) => {
   const methods = useSurveyForm(survey);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>{survey.title}</Text>
+    <SafeAreaView className="flex-1 px-6">
+      <Text className="text-[32px] mb-16">{survey.title}</Text>
       <FormProvider {...methods}>
+        {/* TODO: implement other survey types */}
         {survey.type === 'form' && (
           <FormSurvey onSubmit={onSubmit} questions={survey.questions} />
         )}

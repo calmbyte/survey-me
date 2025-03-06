@@ -13,7 +13,7 @@ type Props = {
   onOpenSubmission: () => void;
 };
 
-export const Screen = memo(({isVisible, onOpenSubmission}: Props) => {
+export const SurveyScreen = memo(({isVisible, onOpenSubmission}: Props) => {
   const opacity = useSharedValue(0);
 
   const {data, loading, error, fetchSurvey} = useSurveyQuery();
