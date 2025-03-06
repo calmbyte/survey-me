@@ -4,23 +4,6 @@ export type BaseQuestion = {
   type: 'text' | 'textarea' | 'radio' | 'checkbox';
 };
 
-export interface CheckboxQuestion extends BaseQuestion {
-  type: 'checkbox';
-  options: string[];
-  props: {required: boolean};
-}
-
-export interface RadioQuestion extends BaseQuestion {
-  type: 'radio';
-  options: string[];
-  props: {required: boolean};
-}
-
-export interface TextQuestion extends BaseQuestion {
-  type: 'text';
-  props: {required: boolean; maxLength?: number};
-}
-
 export type Question = BaseQuestion &
   (
     | {

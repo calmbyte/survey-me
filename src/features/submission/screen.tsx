@@ -1,4 +1,5 @@
 import {Button, ButtonText} from '@/components/ui/button';
+import {setActiveScreen} from '@/src/state/app';
 import React, {useEffect} from 'react';
 import {Text, View} from 'react-native';
 import Animated, {
@@ -9,10 +10,9 @@ import Animated, {
 
 type Props = {
   isVisible: boolean;
-  onOpenWelcome: () => void;
 };
 
-export const SubmissionScreen = ({isVisible, onOpenWelcome}: Props) => {
+export const SubmissionScreen = ({isVisible}: Props) => {
   const opacity = useSharedValue(0);
 
   useEffect(() => {
@@ -29,6 +29,10 @@ export const SubmissionScreen = ({isVisible, onOpenWelcome}: Props) => {
     }
   }, [isVisible, opacity]);
 
+  const handleOpenWelcome = () => {
+    setActiveScreen('welcome');
+  };
+
   return (
     <Animated.View
       className={`absolute inset-0 ${
@@ -40,7 +44,7 @@ export const SubmissionScreen = ({isVisible, onOpenWelcome}: Props) => {
       <View className="flex-1 items-center justify-center">
         <Text>Thanks for your submission!</Text>
         <Text>We will get back to you soon.</Text>
-        <Button className="mt-4" onPress={onOpenWelcome}>
+        <Button className="mt-4" onPress={handleOpenWelcome}>
           <ButtonText>Go back</ButtonText>
         </Button>
       </View>

@@ -16,16 +16,17 @@ import Animated, {
 import {X, Zap, ZapOff} from 'lucide-react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+import {setActiveScreen} from '@/src/state/app';
+
 const overlaySize = 10;
 const height = Dimensions.get('window').height;
 const scaleValue = (height / overlaySize) * 2.25;
 
 type Props = {
   isVisible: boolean;
-  onClose: () => void;
 };
 
-export const CameraScreen = ({isVisible, onClose}: Props) => {
+export const CameraScreen = ({isVisible}: Props) => {
   const {top} = useSafeAreaInsets();
   const scannerRef = useRef(null);
   const scale = useSharedValue(1);
@@ -61,7 +62,7 @@ export const CameraScreen = ({isVisible, onClose}: Props) => {
   }, [isVisible, scale]);
 
   const handleClose = () => {
-    onClose();
+    setActiveScreen('welcome');
     setAnimationState('in-progress');
     scale.value = withTiming(
       1,

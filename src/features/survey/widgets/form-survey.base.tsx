@@ -1,14 +1,19 @@
 import React from 'react';
 import {View} from 'react-native';
-
-import {Question as QuestionType} from '../types/question';
-import {Question} from '../ui/question';
-import {Button, ButtonText} from '@/components/ui/button';
+import {useForm} from 'react-hook-form';
 import {useFormContext} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {array, object, Schema, string, StringSchema, ArraySchema} from 'yup';
+
+import {Button, ButtonText} from '@/components/ui/button';
+import {setActiveScreen} from '@/src/state/app';
+
+import {Question} from '../ui/question';
+import {FormSurvey} from '../types/survey';
+import {Question as QuestionType} from '../types/question';
 
 export type Props = {
-  questions: QuestionType[];
-  onSubmit: () => void;
+  survey: FormSurvey;
 };
 
 export const renderItem = ({item}: {item: QuestionType}) => {
@@ -19,12 +24,12 @@ export const ItemSeparator = () => <View className="h-[24]" />;
 
 export const keyExtractor = (item: QuestionType) => item.id;
 
-export const ListFooter = ({onSubmit}: {onSubmit: () => void}) => {
+export const ListFooter = () => {
   const {handleSubmit} = useFormContext();
 
   const handleSubmitCb = (data: Record<string, string | string[]>) => {
     console.log(data);
-    onSubmit();
+    setActiveScreen('submission');
   };
 
   return (
@@ -38,4 +43,67 @@ export const ListFooter = ({onSubmit}: {onSubmit: () => void}) => {
       </Button>
     </View>
   );
+};
+
+export const createValidationSchema = (questions: QuestionType[]) => {
+  const schema: Record<string, Schema> = {};
+
+  for (const q of questions) {
+    switch (q.type) {
+      case 'text':
+      case 'textarea':
+        schema[q.id] = string();
+        if (q.props.maxLength) {
+          schema[q.id] = (schema[q.id] as StringSchema).max(q.props.maxLength);
+        }
+        break;
+      case 'radio':
+        schema[q.id] = string();
+        break;
+      case 'checkbox':
+        schema[q.id] = array();
+        break;
+      default:
+        break;
+    }
+
+    if (q.props.required) {
+      switch (q.type) {
+        case 'checkbox':
+          schema[q.id] = (schema[q.id] as ArraySchema<string[], Schema>).min(
+            1,
+            'Select at least one option',
+          );
+          break;
+        default:
+          schema[q.id] = schema[q.id].required('This field is required');
+          break;
+      }
+    }
+  }
+
+  return object().shape(schema);
+};
+
+export const useSurveyForm = (survey: FormSurvey) => {
+  const methods = useForm({
+    defaultValues: survey.questions.reduce((acc, question) => {
+      switch (question.type) {
+        case 'textarea':
+        case 'text':
+        case 'radio':
+          acc[question.id] = '';
+          break;
+        case 'checkbox':
+          acc[question.id] = [];
+          break;
+        default:
+          break;
+      }
+      return acc;
+    }, {} as Record<string, string | []>),
+    resolver: yupResolver(createValidationSchema(survey.questions)),
+  });
+
+  return methods;
 };

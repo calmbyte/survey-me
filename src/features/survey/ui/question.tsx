@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, View} from 'react-native';
 
 import {Question as QType} from '../types/question';
-import {CheckboxControl} from './checkbox-question';
+import {CheckboxControl} from './checkbox-control';
 import {TextControl} from './text-control';
 import {TextareaControl} from './textarea-control';
 import {RadioControl} from './radio-control';

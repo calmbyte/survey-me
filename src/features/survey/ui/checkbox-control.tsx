@@ -1,7 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
 
-import {CheckboxQuestion as CQType} from '../types/question';
 import {
   Checkbox,
   CheckboxIcon,
@@ -12,7 +11,7 @@ import {CheckIcon} from 'lucide-react-native';
 import {useController, useFormContext} from 'react-hook-form';
 
 type Props = {
-  options: CQType['options'];
+  options: string[];
   name: string;
 };
 

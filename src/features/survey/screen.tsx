@@ -10,10 +10,9 @@ import {useSurveyQuery} from './hooks/useSurveyQuery';
 
 type Props = {
   isVisible: boolean;
-  onOpenSubmission: () => void;
 };
 
-export const SurveyScreen = memo(({isVisible, onOpenSubmission}: Props) => {
+export const SurveyScreen = memo(({isVisible}: Props) => {
   const opacity = useSharedValue(0);
 
   const {data, loading, error, fetchSurvey} = useSurveyQuery();
@@ -54,7 +53,7 @@ export const SurveyScreen = memo(({isVisible, onOpenSubmission}: Props) => {
             <Text>Error {error}</Text>
           </View>
         )}
-        {data && <Survey survey={data} onSubmit={onOpenSubmission} />}
+        {data && <Survey survey={data} />}
       </View>
     </Animated.View>
   );

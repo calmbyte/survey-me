@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {Alert, FlatList} from 'react-native';
+import {FormProvider} from 'react-hook-form';
 
 import {
   ItemSeparator,
@@ -7,20 +8,25 @@ import {
   ListFooter,
   Props,
   renderItem,
+  useSurveyForm,
 } from './form-survey.base';
 
-export const FormSurvey = ({questions, onSubmit}: Props) => {
+export const FormSurvey = ({survey}: Props) => {
+  const methods = useSurveyForm(survey);
+
   useEffect(() => {
     Alert.alert('Welcome', 'Please fill out the survey');
   }, []);
 
   return (
-    <FlatList
-      data={questions}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-      ItemSeparatorComponent={ItemSeparator}
-      ListFooterComponent={<ListFooter onSubmit={onSubmit} />}
-    />
+    <FormProvider {...methods}>
+      <FlatList
+        data={survey.questions}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        ItemSeparatorComponent={ItemSeparator}
+        ListFooterComponent={<ListFooter />}
+      />
+    </FormProvider>
   );
 };

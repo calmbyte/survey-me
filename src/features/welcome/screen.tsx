@@ -8,18 +8,13 @@ import Animated, {
 import {useCheckCameraPermission} from '../../services/permissions/hooks/useCheckCameraPermission';
 import {Camera} from 'lucide-react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {setActiveScreen} from '@/src/state/app';
 
 type Props = {
   isVisible: boolean;
-  onOpenCamera: () => void;
-  onOpenSurvey: () => void;
 };
 
-export const WelcomeScreen = ({
-  isVisible,
-  onOpenCamera,
-  onOpenSurvey,
-}: Props) => {
+export const WelcomeScreen = ({isVisible}: Props) => {
   const opacity = useSharedValue(0);
   const {top} = useSafeAreaInsets();
   const {isCameraPermissionGranted} = useCheckCameraPermission();
@@ -42,11 +37,15 @@ export const WelcomeScreen = ({
 
   useEffect(() => {
     if (code.length > 7) {
-      onOpenSurvey();
+      setActiveScreen('survey');
       setCode('');
       Keyboard.dismiss();
     }
-  }, [code, onOpenSurvey]);
+  }, [code]);
+
+  const handleOpenCamera = () => {
+    setActiveScreen('camera');
+  };
 
   return (
     <Animated.View
@@ -72,7 +71,7 @@ export const WelcomeScreen = ({
         <Pressable
           disabled={!isCameraPermissionGranted}
           className="flex-row items-center justify-center bg-[#31363F] py-3 px-[18px] rounded-xl gap-3"
-          onPress={onOpenCamera}>
+          onPress={handleOpenCamera}>
           <Camera color="#FFFAEC" />
           <Text className="text-[#FFFAEC] text-xl">Scan QR</Text>
         </Pressable>

@@ -1,91 +1,19 @@
 import React from 'react';
 import {Text} from 'react-native';
-import {yupResolver} from '@hookform/resolvers/yup';
-import {FormProvider, useForm} from 'react-hook-form';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {array, ArraySchema, object, Schema, string, StringSchema} from 'yup';
 
 import {Survey as SurveyType} from '../types/survey';
-import {Question} from '../types/question';
 import {FormSurvey} from './form-survey';
 
-type Props = {survey: SurveyType; onSubmit: () => void};
+type Props = {survey: SurveyType};
 
-const createValidationSchema = (questions: Question[]) => {
-  const schema: Record<string, Schema> = {};
-
-  for (const q of questions) {
-    switch (q.type) {
-      case 'text':
-      case 'textarea':
-        schema[q.id] = string();
-        if (q.props.maxLength) {
-          schema[q.id] = (schema[q.id] as StringSchema).max(q.props.maxLength);
-        }
-        break;
-      case 'radio':
-        schema[q.id] = string();
-        break;
-      case 'checkbox':
-        schema[q.id] = array();
-        break;
-      default:
-        break;
-    }
-
-    if (q.props.required) {
-      switch (q.type) {
-        case 'checkbox':
-          schema[q.id] = (schema[q.id] as ArraySchema<string[], Schema>).min(
-            1,
-            'Select at least one option',
-          );
-          break;
-        default:
-          schema[q.id] = schema[q.id].required('This field is required');
-          break;
-      }
-    }
-  }
-
-  return object().shape(schema);
-};
-
-const useSurveyForm = (survey: SurveyType) => {
-  const methods = useForm({
-    defaultValues: survey.questions.reduce((acc, question) => {
-      switch (question.type) {
-        case 'textarea':
-        case 'text':
-        case 'radio':
-          acc[question.id] = '';
-          break;
-        case 'checkbox':
-          acc[question.id] = [];
-          break;
-        default:
-          break;
-      }
-      return acc;
-    }, {} as Record<string, string | []>),
-    resolver: yupResolver(createValidationSchema(survey.questions)),
-  });
-
-  return methods;
-};
-
-export const Survey = ({survey, onSubmit}: Props) => {
-  const methods = useSurveyForm(survey);
-
+export const Survey = ({survey}: Props) => {
   return (
     <SafeAreaView className="flex-1 px-6">
       <Text className="text-[32px] mb-16">{survey.title}</Text>
-      <FormProvider {...methods}>
-        {/* TODO: implement other survey types */}
-        {survey.type === 'form' && (
-          <FormSurvey onSubmit={onSubmit} questions={survey.questions} />
-        )}
-      </FormProvider>
+
+      {/* TODO: implement other survey types */}
+      {survey.type === 'form' && <FormSurvey survey={survey} />}
     </SafeAreaView>
   );
 };

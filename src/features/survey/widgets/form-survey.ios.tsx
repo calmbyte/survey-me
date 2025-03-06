@@ -1,4 +1,5 @@
 import React from 'react';
+import {FormProvider} from 'react-hook-form';
 import {FlatList, KeyboardAvoidingView} from 'react-native';
 
 import {
@@ -7,18 +8,23 @@ import {
   ListFooter,
   Props,
   renderItem,
+  useSurveyForm,
 } from './form-survey.base';
 
-export const FormSurvey = ({questions, onSubmit}: Props) => {
+export const FormSurvey = ({survey}: Props) => {
+  const methods = useSurveyForm(survey);
+
   return (
-    <KeyboardAvoidingView className="flex-1" behavior="padding">
-      <FlatList
-        data={questions}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        ItemSeparatorComponent={ItemSeparator}
-        ListFooterComponent={<ListFooter onSubmit={onSubmit} />}
-      />
-    </KeyboardAvoidingView>
+    <FormProvider {...methods}>
+      <KeyboardAvoidingView className="flex-1" behavior="padding">
+        <FlatList
+          data={survey.questions}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          ItemSeparatorComponent={ItemSeparator}
+          ListFooterComponent={<ListFooter />}
+        />
+      </KeyboardAvoidingView>
+    </FormProvider>
   );
 };
