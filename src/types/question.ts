@@ -16,3 +16,9 @@ export type Question = BaseQuestion &
         props: {required: boolean};
       }
   );
+
+export interface QuestionGroup {
+  title: string;
+  description?: string;
+  questions: Question[];
+}

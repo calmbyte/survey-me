@@ -45,7 +45,9 @@ export const WelcomeScreen = ({isVisible}: Props) => {
 
   // TMP
   const handleGetSurveyByCode = async () => {
-    const survey = await getSurveyByCode(surveyPublicId);
+    const survey = await getSurveyByCode(
+      '972fb085-a050-4fa8-aa39-9cff12ca889c',
+    );
     setSurvey(survey);
     setActiveScreen('survey');
   };

@@ -9,10 +9,10 @@ import {
   Props,
   renderItem,
   useSurveyForm,
-} from './form-survey.base';
+} from './survey.base';
 
 export const FormSurvey = ({survey}: Props) => {
-  const methods = useSurveyForm(survey);
+  const methods = useSurveyForm(survey.questions);
 
   useEffect(() => {
     Alert.alert('Welcome', 'Please fill out the survey');

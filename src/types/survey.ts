@@ -1,4 +1,4 @@
-import {Question} from './question';
+import {Question, QuestionGroup} from './question';
 
 export interface BaseSurvey {
   id: string;
@@ -15,7 +15,7 @@ export interface FormSurvey extends BaseSurvey {
 export interface WizardSurvey extends BaseSurvey {
   type: 'wizard-form';
   steps: number;
-  questions: Question[][];
+  question_groups: QuestionGroup[];
 }
 
 export type Survey = FormSurvey | WizardSurvey;

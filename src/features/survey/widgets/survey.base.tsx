@@ -5,12 +5,12 @@ import {useFormContext} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {array, object, Schema, string, StringSchema, ArraySchema} from 'yup';
 
+import {Question as QuestionType} from '@/src/types/question';
 import {Button, ButtonText} from '@/components/ui/button';
 import {setActiveScreen} from '@/src/state/app';
+import {FormSurvey} from '@/src/types/survey';
 
 import {Question} from '../ui/question';
-import {FormSurvey} from '../../../types/types/survey';
-import {Question as QuestionType} from '../../../types/types/question';
 
 export type Props = {
   survey: FormSurvey;
@@ -85,9 +85,9 @@ export const createValidationSchema = (questions: QuestionType[]) => {
   return object().shape(schema);
 };
 
-export const useSurveyForm = (survey: FormSurvey) => {
+export const useSurveyForm = (questions: QuestionType[]) => {
   const methods = useForm({
-    defaultValues: survey.questions.reduce((acc, question) => {
+    defaultValues: questions.reduce((acc, question) => {
       switch (question.type) {
         case 'textarea':
         case 'text':
@@ -102,7 +102,7 @@ export const useSurveyForm = (survey: FormSurvey) => {
       }
       return acc;
     }, {} as Record<string, string | []>),
-    resolver: yupResolver(createValidationSchema(survey.questions)),
+    resolver: yupResolver(createValidationSchema(questions)),
   });
 
   return methods;

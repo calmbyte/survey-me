@@ -9,10 +9,10 @@ import {
   Props,
   renderItem,
   useSurveyForm,
-} from './form-survey.base';
+} from './survey.base';
 
 export const FormSurvey = ({survey}: Props) => {
-  const methods = useSurveyForm(survey);
+  const methods = useSurveyForm(survey.questions);
 
   return (
     <FormProvider {...methods}>
