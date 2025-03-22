@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Text, Pressable, TextInput, View, Keyboard} from 'react-native';
+import React, {useEffect} from 'react';
+import {Text, TextInput, View} from 'react-native';
 import Animated, {
   Easing,
   useSharedValue,
@@ -9,6 +9,10 @@ import {useCheckCameraPermission} from '../../services/permissions/hooks/useChec
 import {Camera} from 'lucide-react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {setActiveScreen} from '@/src/state/app';
+import {setSurveyPublicId, useSurveyStore} from '@/src/state/survey';
+import {setSurvey} from '@/src/state/survey';
+import {Button, ButtonText} from '@/components/ui/button';
+import {getSurveyByCode} from '@/src/services/api/survey';
 
 type Props = {
   isVisible: boolean;
@@ -17,9 +21,9 @@ type Props = {
 export const WelcomeScreen = ({isVisible}: Props) => {
   const opacity = useSharedValue(0);
   const {top} = useSafeAreaInsets();
-  const {isCameraPermissionGranted} = useCheckCameraPermission();
 
-  const [code, setCode] = useState('');
+  const {isCameraPermissionGranted} = useCheckCameraPermission();
+  const surveyPublicId = useSurveyStore.use.surveyPublicId();
 
   useEffect(() => {
     if (isVisible) {
@@ -35,16 +39,15 @@ export const WelcomeScreen = ({isVisible}: Props) => {
     }
   }, [isVisible, opacity]);
 
-  useEffect(() => {
-    if (code.length > 7) {
-      setActiveScreen('survey');
-      setCode('');
-      Keyboard.dismiss();
-    }
-  }, [code]);
-
   const handleOpenCamera = () => {
     setActiveScreen('camera');
+  };
+
+  // TMP
+  const handleGetSurveyByCode = async () => {
+    const survey = await getSurveyByCode(surveyPublicId);
+    setSurvey(survey);
+    setActiveScreen('survey');
   };
 
   return (
@@ -58,23 +61,29 @@ export const WelcomeScreen = ({isVisible}: Props) => {
       <Text className="text-[32px] mb-16" style={{marginTop: top + 100}}>
         Welcome to SurveyMe
       </Text>
-      <View className="items-center self-center gap-4">
-        <Text className="text-2xl">Insert survey code</Text>
-        <TextInput
-          placeholder="FE3BC12P"
-          placeholderTextColor={'#ccc'}
-          className="rounded-xl bg-[#FFFAEC] text-[#31363F] border border-[#31363F] w-[180px] py-3 px-4 text-2xl uppercase"
-          onChangeText={setCode}
-          value={code}
-        />
-        <Text className="text-2xl">Or</Text>
-        <Pressable
-          disabled={!isCameraPermissionGranted}
-          className="flex-row items-center justify-center bg-[#31363F] py-3 px-[18px] rounded-xl gap-3"
-          onPress={handleOpenCamera}>
+      <View className="items-center self-center gap-4 ">
+        <View className="items-center gap-4 border border-red-500 p-3">
+          <Text>This section is tmp</Text>
+          <Text className="text-2xl">Insert survey code</Text>
+          <TextInput
+            placeholder="FE3BC12P"
+            placeholderTextColor={'#ccc'}
+            className="rounded-xl bg-[#FFFAEC] text-[#31363F] border border-[#31363F] w-[180px] py-3 px-4 text-2xl uppercase"
+            onChangeText={setSurveyPublicId}
+            value={surveyPublicId}
+          />
+          <Button onPress={handleGetSurveyByCode}>
+            <ButtonText>TMP get survey code</ButtonText>
+          </Button>
+          <Text className="text-2xl">Or</Text>
+        </View>
+        <Button
+          size="lg"
+          onPress={handleOpenCamera}
+          disabled={!isCameraPermissionGranted}>
           <Camera color="#FFFAEC" />
-          <Text className="text-[#FFFAEC] text-xl">Scan QR</Text>
-        </Pressable>
+          <ButtonText>Scan QR</ButtonText>
+        </Button>
       </View>
     </Animated.View>
   );

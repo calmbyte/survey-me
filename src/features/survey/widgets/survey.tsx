@@ -2,7 +2,7 @@ import React from 'react';
 import {Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-import {Survey as SurveyType} from '../types/survey';
+import {Survey as SurveyType} from '../../../types/types/survey';
 import {FormSurvey} from './form-survey';
 
 type Props = {survey: SurveyType};

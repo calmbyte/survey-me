@@ -1,5 +1,7 @@
 import {create} from 'zustand';
+
 import {createSelectors} from './createSelectors';
+
 export type Screen = 'camera' | 'survey' | 'welcome' | 'submission';
 
 interface AppState {

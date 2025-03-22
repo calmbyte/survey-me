@@ -1,6 +1,6 @@
 export type BaseQuestion = {
   id: string;
-  text: string;
+  description: string;
   type: 'text' | 'textarea' | 'radio' | 'checkbox';
 };
 

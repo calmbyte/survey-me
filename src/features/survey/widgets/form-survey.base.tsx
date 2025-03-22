@@ -9,8 +9,8 @@ import {Button, ButtonText} from '@/components/ui/button';
 import {setActiveScreen} from '@/src/state/app';
 
 import {Question} from '../ui/question';
-import {FormSurvey} from '../types/survey';
-import {Question as QuestionType} from '../types/question';
+import {FormSurvey} from '../../../types/types/survey';
+import {Question as QuestionType} from '../../../types/types/question';
 
 export type Props = {
   survey: FormSurvey;

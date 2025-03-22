@@ -1,7 +1,8 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 
-import {Question as QType} from '../types/question';
+import {Question as QType} from '@/src/types/question';
+
 import {CheckboxControl} from './checkbox-control';
 import {TextControl} from './text-control';
 import {TextareaControl} from './textarea-control';
@@ -15,7 +16,7 @@ export const Question = ({question}: Props) => {
   return (
     <View className="rounded-[8] border-2 border-black p-[8]">
       <Text>
-        {question.text} {question.props.required && <Text>*</Text>}
+        {question.description} {question.props.required && <Text>*</Text>}
       </Text>
       {question.type === 'checkbox' && (
         <CheckboxControl name={question.id} options={question.options} />
