@@ -13,6 +13,7 @@ import {
   renderItem,
   useSurveyForm,
 } from './survey.base';
+import {createSurveyResult} from '@/src/services/api/survey';
 
 type Props = {
   survey: WizardSurveyType;
@@ -36,13 +37,19 @@ export const WizardSurvey = ({survey}: Props) => {
   }, [methods, nextStep, form]);
 
   const handleSubmit = useCallback(() => {
-    methods.handleSubmit(data => {
+    methods.handleSubmit(async data => {
       const mergedForm = {...form, ...data};
-      console.log(mergedForm);
-      // TODO: make API call to submit the survey
+      const payload = Object.entries(mergedForm).map(
+        ([questionId, answer]) => ({
+          questionId,
+          answer,
+        }),
+      );
+      // TODO: error handling
+      await createSurveyResult(survey.id, payload);
       setActiveScreen('submission');
     })();
-  }, [methods, form]);
+  }, [methods, form, survey.id]);
 
   return (
     <FormProvider {...methods}>
