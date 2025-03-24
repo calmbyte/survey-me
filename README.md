@@ -79,6 +79,44 @@ npm run android
 yarn android
 ```
 
+## Deep Linking Testing
+
+The app supports deep linking with the `surveyme://` scheme. You can test deep linking using the following methods:
+
+### Android Testing
+
+1. Using adb (Android Debug Bridge):
+
+```bash
+# Open a specific survey
+adb shell am start -W -a android.intent.action.VIEW -d "surveyme://survey/123" com.surveyme
+```
+
+2. Using Android Studio:
+   - Open Android Studio
+   - Go to "Run" > "Edit Configurations"
+   - Add a new "URL" configuration
+   - Enter the deep link URL (e.g., `surveyme://survey/123`)
+   - Run the configuration
+
+### iOS Testing
+
+1. Using Safari:
+
+   - Open Safari on your iOS device or simulator
+   - Enter the deep link URL (e.g., `surveyme://survey/123`)
+
+2. Using Terminal (Simulator):
+
+```bash
+# Open a specific survey
+xcrun simctl openurl booted "surveyme://survey/123"
+```
+
+### Available Deep Link Paths
+
+- `surveyme://survey/{survey_code}` - Opens a specific survey
+
 ## Development
 
 ### Project Structure

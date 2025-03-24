@@ -12,8 +12,6 @@ export const createSurveyResult = async (
   surveyId: string,
   answers: Answer[],
 ) => {
-  console.log(answers);
-
   const response = await fetch(`${API_URL}/surveys/${surveyId}/results`, {
     headers: {
       'Content-Type': 'application/json',
